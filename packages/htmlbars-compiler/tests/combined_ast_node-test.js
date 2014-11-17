@@ -197,6 +197,7 @@ test("a piece of Handlebars with HTML", function() {
 
 test("Handlebars embedded in an attribute", function() {
   var t = 'some <div class="{{foo}}">content</div> done';
+
   astEqual(t, root([
     text("some "),
     element("div", [ attr("class", mustache('foo')) ], [], [
@@ -208,6 +209,7 @@ test("Handlebars embedded in an attribute", function() {
 
 test("Handlebars embedded in an attribute (sexprs)", function() {
   var t = 'some <div class="{{foo (foo "abc")}}">content</div> done';
+
   astEqual(t, root([
     text("some "),
     element("div", [
@@ -404,22 +406,41 @@ test("Stripping - removes unnecessary text nodes", function() {
 });
 
 test("Mustache in unquoted attribute value", function() {
-  var t = "<div class=a{{foo}}></div>";
-  astEqual(t, root([
-    element('div', [ attr('class', concat([string("a"), sexpr([id('foo')])])) ])
-  ]));
-
-  t = "<div class={{foo}}></div>";
+  var t = "<div class={{foo}}></div>";
   astEqual(t, root([
     element('div', [ attr('class', mustache('foo')) ])
   ]));
 
-  t = "<div class=a{{foo}}b></div>";
+  throws(function() {
+    preprocess("<div class=a{{foo}}></div>")
+  });
+
+  throws(function() {
+    preprocess("<div class=a{{foo}}b></div>")
+  });
+
+  throws(function() {
+    preprocess("<div class={{foo}}b></div>")
+  });
+});
+
+test("Mustache in quoted attribute value", function() {
+  var t = '<div class="{{foo}}"></div>';
+  astEqual(t, root([
+    element('div', [ attr('class', mustache('foo')) ])
+  ]));
+
+  t = '<div class="a{{foo}}"></div>';
+  astEqual(t, root([
+    element('div', [ attr('class', concat([string("a"), sexpr([id('foo')])])) ])
+  ]));
+
+  t = '<div class="a{{foo}}b"></div>';
   astEqual(t, root([
     element('div', [ attr('class', concat([string("a"), sexpr([id('foo')]), string("b")])) ])
   ]));
 
-  t = "<div class={{foo}}b></div>";
+  t = '<div class="{{foo}}b"></div>';
   astEqual(t, root([
     element('div', [ attr('class', concat([sexpr([id('foo')]), string("b")])) ])
   ]));
