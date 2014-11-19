@@ -197,7 +197,6 @@ test("a piece of Handlebars with HTML", function() {
 
 test("Handlebars embedded in an attribute", function() {
   var t = 'some <div class="{{foo}}">content</div> done';
-
   astEqual(t, root([
     text("some "),
     element("div", [ attr("class", mustache('foo')) ], [], [
@@ -209,7 +208,6 @@ test("Handlebars embedded in an attribute", function() {
 
 test("Handlebars embedded in an attribute (sexprs)", function() {
   var t = 'some <div class="{{foo (foo "abc")}}">content</div> done';
-
   astEqual(t, root([
     text("some "),
     element("div", [
@@ -412,15 +410,15 @@ test("Mustache in unquoted attribute value", function() {
   ]));
 
   throws(function() {
-    preprocess("<div class=a{{foo}}></div>")
+    preprocess("<div class=a{{foo}}></div>");
   });
 
   throws(function() {
-    preprocess("<div class=a{{foo}}b></div>")
+    preprocess("<div class=a{{foo}}b></div>");
   });
 
   throws(function() {
-    preprocess("<div class={{foo}}b></div>")
+    preprocess("<div class={{foo}}b></div>");
   });
 });
 

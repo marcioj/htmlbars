@@ -8,7 +8,7 @@ var states = {
   "beforeAttributeValue": "before-attr",
   "attributeValueDoubleQuoted": "attr",
   "attributeValueSingleQuoted": "attr",
-  "attributeValueUnquoted": "attr",
+  "attributeValueUnquoted": "invalid-attr",
   "beforeAttributeName": "in-tag"
 };
 
@@ -77,6 +77,8 @@ var tokenHandlers = {
     var token = this.tokenizer.token;
 
     switch(states[state]) {
+      case "invalid-attr":
+        throw new Error("Fail");
       case "before-attr":
         this.tokenizer.state = 'attributeValueUnquoted';
         token.addToAttributeValue(mustache);

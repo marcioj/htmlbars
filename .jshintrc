@@ -6,7 +6,8 @@
     "expect": true,
     "equal": true,
     "deepEqual": true,
-    "ok": true
+    "ok": true,
+    "throws": true
   },
   "camelcase": true,
   "curly": true,
